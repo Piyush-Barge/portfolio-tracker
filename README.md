@@ -40,9 +40,9 @@ pip install yfinance pandas tabulate
 
 ### Step 3: Add your trades
 Grab your NSE trade export and save it as `trades.csv`. It should have these columns:
-```
+
 Symbol, ISIN, Trade Date, Exchange, Segment, Series, Trade Type, Auction, Quantity, Price, Trade ID, Order ID, Order Execution Time
-```
+
 Just make sure `Trade Type` is either `buy` or `sell` (lowercase).
 
 ### Step 4: Run it
@@ -69,11 +69,6 @@ Used Claude (Anthropic) to help build this. Asked it to create a portfolio track
 
 ## Prompt Used:
 
-Build a Python portfolio tracker that:
-- Reads NSE trade history from CSV
-- Uses FIFO accounting
-- Fetches live prices using yfinance
-- Calculates realised and unrealised P&L
-- Generates console, CSV and HTML reports
+Build a Python-based portfolio tracker that reads NSE trade history from a CSV file and processes transactions using FIFO accounting. Fetch live stock prices using the yfinance library (NSE tickers with .NS suffix). Compute realised and unrealised P&L for each holding, along with current portfolio value and allocation percentage. Generate output reports in three formats: console table, CSV file, and HTML report for browser viewing.
 
 
