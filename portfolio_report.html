@@ -1,231 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <title>Portfolio Report</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; max-width: 960px; margin: 40px auto; padding: 0 20px; color: #111; }
+  h1 { font-size: 20px; margin-bottom: 4px; }
+  .meta { color: #888; font-size: 13px; margin-bottom: 24px; }
+  .cards { display: flex; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; }
+  .card { border: 1px solid #e5e5e5; border-radius: 8px; padding: 14px 20px; min-width: 160px; }
+  .card-label { font-size: 11px; text-transform: uppercase; color: #888; margin-bottom: 4px; }
+  .card-val { font-size: 18px; font-weight: 600; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 8px 10px; border-bottom: 2px solid #eee; font-size: 11px; text-transform: uppercase; color: #888; }
+  td { padding: 12px 10px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+  small { color: #999; }
+  .green { color: #2a7d3f; } .red { color: #c0392b; }
+  tr:hover td { background: #fafafa; }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: #fafaf9;
-    color: #1a1a18;
-    padding: 48px 32px;
-    min-height: 100vh;
-  }
-
-  .wrap { max-width: 960px; margin: 0 auto; }
-
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding-bottom: 20px;
-    border-bottom: 0.5px solid #d4d3ce;
-    margin-bottom: 36px;
-  }
-
-  .header-left .eyebrow { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #888780; margin-bottom: 6px; }
-  .header-left h1 { font-size: 22px; font-weight: 500; }
-  .header-right { font-family: 'DM Mono', monospace; font-size: 12px; color: #888780; text-align: right; line-height: 1.9; }
-
-  .summary {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    border: 0.5px solid #d4d3ce;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 36px;
-  }
-
-  .s-card {
-    padding: 16px 20px;
-    border-right: 0.5px solid #d4d3ce;
-  }
-  .s-card:last-child { border-right: none; }
-  .s-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #888780; margin-bottom: 7px; }
-  .s-val { font-family: 'DM Mono', monospace; font-size: 17px; font-weight: 500; color: #1a1a18; }
-  .s-val.up { color: #3a7d44; }
-
-  .table-scroll { overflow-x: auto; }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
-
-  thead th {
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #888780;
-    text-align: right;
-    padding: 0 12px 11px;
-    border-bottom: 0.5px solid #d4d3ce;
-    white-space: nowrap;
-  }
-  thead th:first-child { text-align: left; padding-left: 0; }
-
-  tbody td {
-    padding: 15px 12px;
-    text-align: right;
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    border-bottom: 0.5px solid #eeeee9;
-    white-space: nowrap;
-    vertical-align: middle;
-  }
-  tbody tr:last-child td { border-bottom: none; }
-  tbody td:first-child { text-align: left; padding-left: 0; font-family: 'DM Sans', sans-serif; }
-
-  .sym-cell { display: flex; flex-direction: column; gap: 2px; }
-  .sym-name { font-size: 14px; font-weight: 500; font-family: 'DM Sans', sans-serif; }
-  .sym-qty { font-size: 11px; color: #888780; font-family: 'DM Mono', monospace; }
-
-  .up { color: #3a7d44; }
-  .down { color: #b93131; }
-
-  .pill {
-    display: inline-block;
-    font-size: 11px;
-    font-family: 'DM Mono', monospace;
-    padding: 3px 8px;
-    border-radius: 4px;
-  }
-  .pill.up { background: #eaf3de; color: #3a7d44; }
-  .pill.down { background: #fcebeb; color: #b93131; }
-
-  .alloc-wrap { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
-  .alloc-bg { width: 48px; height: 3px; background: #e2e1db; border-radius: 2px; flex-shrink: 0; }
-  .alloc-fill { height: 3px; border-radius: 2px; background: #5f5e5a; }
-  .alloc-num { font-size: 12px; color: #888780; min-width: 36px; font-family: 'DM Mono', monospace; }
-
-  footer {
-    margin-top: 28px;
-    padding-top: 14px;
-    border-top: 0.5px solid #d4d3ce;
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    color: #aaa9a3;
-  }
-</style>
-</head>
-<body>
-<div class="wrap">
-
-  <header>
-    <div class="header-left">
-      <div class="eyebrow">Equity Portfolio · NSE India</div>
-      <h1>Holdings Report</h1>
-    </div>
-    <div class="header-right">
-      15 Jun 2026, 07:03 PM<br>
-      3 stocks &nbsp;·&nbsp; 112 shares
-    </div>
-  </header>
-
-  <div class="summary">
-    <div class="s-card">
-      <div class="s-label">Portfolio value</div>
-      <div class="s-val">₹246,524</div>
-    </div>
-    <div class="s-card">
-      <div class="s-label">Cost basis</div>
-      <div class="s-val">₹286,000</div>
-    </div>
-    <div class="s-card">
-      <div class="s-label">Unrealised P&amp;L</div>
-      <div class="s-val down">₹-39,476</div>
-    </div>
-    <div class="s-card">
-      <div class="s-label">Realised P&amp;L</div>
-      <div class="s-val up">+₹52,250</div>
-    </div>
-  </div>
-
-  <div class="table-scroll">
-    <table>
-      <thead>
-        <tr>
-          <th>Stock</th>
-          <th>Avg buy</th>
-          <th>LTP</th>
-          <th>Cost basis</th>
-          <th>Current value</th>
-          <th>Unrealised P&amp;L</th>
-          <th>Realised P&amp;L</th>
-          <th>Allocation</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="sym-cell">
-            <span class="sym-name">APARINDS</span>
-            <span class="sym-qty">7 shares</span>
-          </td>
-          <td>₹10,714</td>
-          <td>₹15,986</td>
-          <td>₹75,000</td>
-          <td>₹111,902</td>
-          <td><span class="pill up">+₹36,902 &nbsp; +49.20%</span></td>
-          <td class="up">+₹8,000</td>
-          <td>
-            <div class="alloc-wrap">
-              <div class="alloc-bg"><div class="alloc-fill" style="width:45.39%"></div></div>
-              <span class="alloc-num">45.4%</span>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td class="sym-cell">
-            <span class="sym-name">MEDANTA</span>
-            <span class="sym-qty">30 shares</span>
-          </td>
-          <td>₹1,200</td>
-          <td>₹1,220</td>
-          <td>₹36,000</td>
-          <td>₹36,597</td>
-          <td><span class="pill up">+₹597 &nbsp; +1.66%</span></td>
-          <td class="up">+₹3,000</td>
-          <td>
-            <div class="alloc-wrap">
-              <div class="alloc-bg"><div class="alloc-fill" style="width:14.85%"></div></div>
-              <span class="alloc-num">14.8%</span>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td class="sym-cell">
-            <span class="sym-name">RELIANCE</span>
-            <span class="sym-qty">75 shares</span>
-          </td>
-          <td>₹2,333</td>
-          <td>₹1,307</td>
-          <td>₹175,000</td>
-          <td>₹98,025</td>
-          <td><span class="pill down">₹-76,975 &nbsp; -43.99%</span></td>
-          <td class="up">+₹41,250</td>
-          <td>
-            <div class="alloc-wrap">
-              <div class="alloc-bg"><div class="alloc-fill" style="width:39.76%"></div></div>
-              <span class="alloc-num">39.8%</span>
-            </div>
-          </td>
-        </tr></tbody>
-    </table>
-  </div>
-
-  <footer>
-    <span>Prices via Yahoo Finance (yfinance · .NS suffix for NSE)</span>
-    <span>For reference only · not financial advice</span>
-  </footer>
-
+</style></head><body>
+<h1> Portfolio Tracker — NSE India</h1>
+<div class="meta">Generated: 15 Jun 2026, 08:34 PM &nbsp;·&nbsp; 3 stocks</div>
+<div class="cards">
+  <div class="card"><div class="card-label">Portfolio Value</div><div class="card-val">₹246,524</div></div>
+  <div class="card"><div class="card-label">Unrealised P&amp;L</div><div class="card-val red">₹-39,476</div></div>
+  <div class="card"><div class="card-label">Realised P&amp;L</div><div class="card-val green">+₹52,250</div></div>
+  <div class="card"><div class="card-label">Total P&amp;L</div><div class="card-val green">+₹12,774</div></div>
 </div>
-</body>
-</html>
+<table><thead><tr>
+  <th>Stock</th><th>Avg Buy</th><th>LTP</th><th>Cost Basis</th>
+  <th>Cur Value</th><th>Unrealised P&amp;L</th><th>Realised P&amp;L</th><th>Alloc</th>
+</tr></thead><tbody><tr>
+          <td><b>APARINDS</b><br><small>7 shares</small></td>
+          <td>₹10,714</td><td>₹15,986</td>
+          <td>₹75,000</td><td>₹111,902</td>
+          <td class="green">+₹36,902 (+49.2%)</td>
+          <td class="green">+₹8,000</td>
+          <td>45.4%</td></tr><tr>
+          <td><b>MEDANTA</b><br><small>30 shares</small></td>
+          <td>₹1,200</td><td>₹1,220</td>
+          <td>₹36,000</td><td>₹36,597</td>
+          <td class="green">+₹597 (+1.7%)</td>
+          <td class="green">+₹3,000</td>
+          <td>14.8%</td></tr><tr>
+          <td><b>RELIANCE</b><br><small>75 shares</small></td>
+          <td>₹2,333</td><td>₹1,307</td>
+          <td>₹175,000</td><td>₹98,025</td>
+          <td class="red">₹-76,975 (-44.0%)</td>
+          <td class="green">+₹41,250</td>
+          <td>39.8%</td></tr></tbody></table>
+<p style="margin-top:20px;font-size:11px;color:#bbb">Prices via Yahoo Finance · Not financial advice</p>
+</body></html>

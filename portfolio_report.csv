@@ -1,4 +1,4 @@
-Symbol,Qty,Avg Buy (₹),LTP (₹),Cost Basis (₹),Current Value (₹),Unrealised P&L (₹),Unrealised P&L (%),Realised P&L (₹),Allocation (%)
+Symbol,Qty,Avg Buy (₹),LTP (₹),Cost Basis (₹),Cur Value (₹),Unreal P&L (₹),Unreal P&L (%),Real P&L (₹),Alloc (%)
 APARINDS,7,10714.29,15986.0,75000.0,111902.0,36902.0,49.2,8000.0,45.39
 MEDANTA,30,1200.0,1219.9,36000.0,36597.0,597.0,1.66,3000.0,14.85
 RELIANCE,75,2333.33,1307.0,175000.0,98025.0,-76975.0,-43.99,41250.0,39.76

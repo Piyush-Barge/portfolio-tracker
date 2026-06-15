@@ -61,6 +61,10 @@ Run the script and you get:
 
 Prices update every time you run it.
 
+## Screenshot
+
+![Project tracker](output-image.png)
+
 
 ## Built with AI
 
