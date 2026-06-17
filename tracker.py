@@ -1,5 +1,12 @@
+"""
+Portfolio Tracker — NSE India
+Reads trades.csv, computes holdings via FIFO,
+fetches live prices, outputs console + CSV + HTML.
+"""
+
 import pandas as pd
-import yfinance as yf
+import requests
+import time
 from datetime import datetime
 from tabulate import tabulate
 
@@ -42,11 +49,18 @@ def compute_holdings(df):
 
 
 def fetch_prices(symbols):
+    import requests, time
     prices = {}
+    headers = {"User-Agent": "Mozilla/5.0"}
     for s in symbols:
         try:
-            t = yf.Ticker(f"{s}.NS").fast_info
-            prices[s] = round(float(t.last_price or t.previous_close), 2)
+            # Direct Yahoo Finance API — no caching
+            url = (f"https://query1.finance.yahoo.com/v8/finance/chart/{s}.NS"
+                   f"?interval=1d&range=5d&_={int(time.time())}")
+            r = requests.get(url, headers=headers, timeout=10)
+            data = r.json()
+            price = data["chart"]["result"][0]["meta"]["regularMarketPrice"]
+            prices[s] = round(float(price), 2)
             print(f"  ✓ {s}: ₹{prices[s]}")
         except Exception as e:
             print(f"  ✗ {s}: {e}")
@@ -117,9 +131,8 @@ def save_html(rows, total_val, holdings, path="portfolio_report.html"):
   small {{ color: #999; }}
   .green {{ color: #2a7d3f; }} .red {{ color: #c0392b; }}
   tr:hover td {{ background: #fafafa; }}
-
 </style></head><body>
-<h1> Portfolio Tracker — NSE India</h1>
+<h1>📊 Portfolio Tracker — NSE India</h1>
 <div class="meta">Generated: {datetime.now().strftime("%d %b %Y, %I:%M %p")} &nbsp;·&nbsp; {len(rows)} stocks</div>
 <div class="cards">
   <div class="card"><div class="card-label">Portfolio Value</div><div class="card-val">₹{total_val:,.0f}</div></div>
@@ -136,19 +149,19 @@ def save_html(rows, total_val, holdings, path="portfolio_report.html"):
 
     with open(path, "w", encoding="utf-8") as f:
         f.write(html)
-    print(f" HTML → {path}")
+    print(f"  🌐 HTML → {path}")
 
 
 def main():
-    print("\n Loading trades...")
+    print("\n📂 Loading trades...")
     df = load_trades()
-    print(f"  {len(df)} trades · {df['Symbol'].nunique()} symbols\n")
+    print(f"   {len(df)} trades · {df['Symbol'].nunique()} symbols\n")
 
-    print(" Computing holdings (FIFO)...")
+    print("⚙️  Computing holdings (FIFO)...")
     holdings = compute_holdings(df)
     print(f"   Active: {', '.join(holdings)}\n")
 
-    print("Fetching live prices...")
+    print("🌐 Fetching live prices...")
     prices = fetch_prices(list(holdings))
 
     rows, total_val = build_rows(holdings, prices)
@@ -171,11 +184,11 @@ def main():
 
     # CSV
     pd.DataFrame(rows).to_csv("portfolio_report.csv", index=False)
-    print(" CSV → portfolio_report.csv")
+    print("  💾 CSV → portfolio_report.csv")
 
     # HTML
     save_html(rows, total_val, holdings)
-    print("\n Done!\n")
+    print("\n✅ Done!\n")
 
 
 if __name__ == "__main__":
